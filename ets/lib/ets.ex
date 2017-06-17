@@ -19,7 +19,7 @@ defmodule Users do
     :ets.lookup(:users, user)
     |> case do
       [] -> 
-        {:error, "Could not find record."}
+        :record_not_found
       record ->
         [data | _] = record
         %{user => elem(data, 1)}
@@ -28,7 +28,14 @@ defmodule Users do
 
   def delete(user) do
     :ets.delete(:users, user)
-    |> IO.inspect
+
+    find(user)
+    |> case do
+      :record_not_found ->
+        {:ok, "Record has been deleted"}
+      _ ->
+        {:error, "Something went wrong."}
+    end
   end
 
   defp insert_records(json) do
