@@ -16,9 +16,16 @@ defmodule Users do
   end
 
   def find(user) do
-    [record | _] = :ets.lookup(:users, user)
-    data = elem(record, 1)
-    %{user => data}
+    :ets.lookup(:users, user)
+    |> case do
+      [] -> 
+        {:error, "Could not find record."}
+      record ->
+        [data | _] = record
+        %{user => elem(data, 1)}
+    end
+  end
+
   def delete(user) do
     :ets.delete(:users, user)
     |> IO.inspect
