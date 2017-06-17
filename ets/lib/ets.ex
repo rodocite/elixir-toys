@@ -9,7 +9,7 @@ defmodule Users do
       {:ok, file} ->
         file
         |> Poison.decode!
-        |> insert_data
+        |> insert_records
       _ ->
         IO.puts("Could not read file.")
     end
@@ -21,7 +21,7 @@ defmodule Users do
     %{user => data}
   end
 
-  defp insert_data(json) do
+  defp insert_records(json) do
     :ets.new(:users, [:set, :protected, :named_table])
 
     json["data"]
