@@ -17,7 +17,8 @@ defmodule Users do
 
   def find(user) do
     [record | _] = :ets.lookup(:users, user)
-    record
+    data = elem(record, 1)
+    %{user => data}
   end
 
   defp insert_data(json) do
