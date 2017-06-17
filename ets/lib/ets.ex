@@ -19,6 +19,9 @@ defmodule Users do
     [record | _] = :ets.lookup(:users, user)
     data = elem(record, 1)
     %{user => data}
+  def delete(user) do
+    :ets.delete(:users, user)
+    |> IO.inspect
   end
 
   defp insert_records(json) do
