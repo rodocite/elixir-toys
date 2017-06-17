@@ -42,6 +42,6 @@ defmodule Users do
     :ets.new(:users, [:set, :protected, :named_table])
 
     json["data"]
-    |> Enum.each(fn record -> :ets.insert(:users, record) end)
+    |> Enum.each(&(:ets.insert(:users, &1)))
   end
 end
