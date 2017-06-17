@@ -8,7 +8,7 @@ defmodule Users do
     |> case do
       {:ok, file} ->
         file
-        |> Poison.decode
+        |> Poison.decode!
         |> insert_data
       _ ->
         IO.puts("Could not read file.")
@@ -23,7 +23,7 @@ defmodule Users do
   defp insert_data(json) do
     :ets.new(:users, [:set, :protected, :named_table])
 
-    elem(json, 1)["data"]
+    json["data"]
     |> Enum.each(fn record -> :ets.insert(:users, record) end)
   end
 end
