@@ -10,6 +10,10 @@ defmodule Link do
         Process.link(link_to)
         loop
 
+      :to_system_proc ->
+        Process.flag(:trap_exit, true)
+        loop
+
       :crash ->
         1/0
     end
@@ -38,7 +42,21 @@ defmodule Link do
     procs |> Enum.shuffle |> List.first |> send(:crash)
   end
 
+  def convert(procs) do
+    procs
+    |> select_random_proc
+    |> send(:to_system_proc)
+  end
+
   def status(procs) do
     procs |> Enum.map(fn pid -> {pid, Process.alive?(pid)} end)
+  end
+
+  def to_system_proc do
+    Process.flag(:trap_exit, true)
+  end
+
+  defp select_random_proc(procs) do
+    procs |> Enum.shuffle |> List.first
   end
 end
